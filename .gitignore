@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+*.py[codz]
+*$py.class
+.env
+.venv/
