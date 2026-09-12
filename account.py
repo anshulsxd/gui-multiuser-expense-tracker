@@ -24,9 +24,7 @@ def create_table():
 
 
 def create_account(username, password):
-    hashed_password = hashlib.sha256(
-        password.encode()
-    ).hexdigest()
+    hashed_password = hashlib.sha256(password.encode()).hexdigest()
 
     try:
         conn = sqlite3.connect(DB_NAME)
@@ -47,9 +45,7 @@ def create_account(username, password):
 
 
 def login(username, password):
-    hashed_password = hashlib.sha256(
-        password.encode()
-    ).hexdigest()
+    hashed_password = hashlib.sha256(password.encode()).hexdigest()
 
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
@@ -64,6 +60,6 @@ def login(username, password):
     conn.close()
 
     if user:
-        return user[0]       # returns user ID
+        return user[0]
     else:
         return None
