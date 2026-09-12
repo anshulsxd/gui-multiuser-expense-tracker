@@ -27,7 +27,7 @@ def UserLogin():
         dashboard_scr.pack(fill="both", expand=True)
 
     # ------- login scr ------:
-    title_login = ctk.CTkLabel(login_scr, text="Login", font=("Arial", 50, "bold"))
+    title_login = ctk.CTkLabel(login_scr, text="Login", font=("Segoe UI", 50, "bold"))
     title_login.pack(pady=50)
 
     usrnmeEntery = ctk.CTkEntry(login_scr, placeholder_text="Username", width=300, height=40)
@@ -50,6 +50,8 @@ def UserLogin():
 
         if check:
             successLogin()
+            dashboardGreet = ctk.CTkLabel(dashboard_scr, text=f"Welcome {username}!", font=("Segoe UI", 35, "bold"))
+            dashboardGreet.pack(pady=30)
 
         else:
             login_label.configure(text="Incorrect username or password!")
@@ -71,7 +73,7 @@ def UserLogin():
 
     # ------ signup ------
 
-    title_signup = ctk.CTkLabel(createAcc_scr, text="Signup", font=("Arial", 50, "bold"))
+    title_signup = ctk.CTkLabel(createAcc_scr, text="Signup", font=("Segoe UI", 50, "bold"))
     title_signup.pack(pady=50)
 
     createUsrnme = ctk.CTkEntry(createAcc_scr, placeholder_text="Create Username", width=300, height=40)
@@ -107,6 +109,8 @@ def UserLogin():
     backToLogin.pack()
 
     # ------- dashboard -------
+
+    
 
 UserLogin()
 window.mainloop()

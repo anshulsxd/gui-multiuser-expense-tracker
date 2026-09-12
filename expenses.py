@@ -1,5 +1,6 @@
 import sqlite3
 import os
+from datetime import date
 
 app_dir = os.path.join(os.getenv("APPDATA"), "ExpenseTracker")
 os.makedirs(app_dir, exist_ok=True)
@@ -28,9 +29,10 @@ def create_table():
     conn.close()
 
 
-def add_expense(user_id, amount, category, description, date):
+def add_expense(user_id, amount, category, description):
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
+    today = date.today().isoformat()
 
     cursor.execute("""
         INSERT INTO expenses
@@ -41,7 +43,7 @@ def add_expense(user_id, amount, category, description, date):
         amount,
         category,
         description,
-        date
+        today
     ))
 
     conn.commit()
