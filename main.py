@@ -24,7 +24,7 @@ def UserLogin():
 
     def successLogin(username):
         login_scr.pack_forget()
-        userLabel.configure(text=f"👤 Hello, {username}")
+        userLabel.configure(text=f"👤 Hi, {username}")
         dashboard_scr.pack(fill="both", expand=True)
 
     def logout():
@@ -139,6 +139,12 @@ def UserLogin():
 
     logout_btn = ctk.CTkButton(sideBar, text="Logout", width=170, fg_color="gray", hover_color="red", command=logout)
     logout_btn.pack(side="bottom", pady=25, padx=15)
+
+    dashboard_title = ctk.CTkLabel(dashboard_scr, text="Stats", font=("Segoe UI", 50, "bold"))
+    dashboard_title.pack(pady=35)
+
+    total_amount_dashb = ctk.CTkFrame(dashboard_scr, width=175, corner_radius=15)
+    total_amount_dashb.pack(side="left", padx=50, pady=50)
 
 UserLogin()
 window.mainloop()
