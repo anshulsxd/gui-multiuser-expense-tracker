@@ -1,6 +1,7 @@
 import sqlite3
 import os
 from datetime import date
+from datetime import datetime
 
 app_dir = os.path.join(os.getenv("APPDATA"), "ExpenseTracker")
 os.makedirs(app_dir, exist_ok=True)
@@ -96,3 +97,33 @@ def get_total_exp(user_id):
         return 0
 
     return total
+
+def get_this_month(user_id):
+    this_month = datetime.now().strftime("%Y-%m")
+
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT COALESCE(SUM(amount), 0) FROM expenses WHERE user_id = ? AND strftime('%Y-%m', date) = ?""",
+        (user_id, this_month)
+        )
+
+    this_month_total = cursor.fetchone()[0]
+
+    conn.close()
+
+    return this_month_total
+
+def get_total_entries(user_id):
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT COUNT(*) FROM expenses WHERE user_id = ?""", (user_id,)
+        )
+
+    total_entries = cursor.fetchone()[0]
+
+    conn.close()
+    return total_entries

@@ -28,6 +28,8 @@ def UserLogin():
         login_scr.pack_forget()
         userLabel.configure(text=f"👤 Hi, {username}")
         total_amount.configure(text=f"$ {expenses.get_total_exp(user_id):.2f}")
+        this_month.configure(text=f"$ {expenses.get_this_month(user_id):.2f}")
+        total_entries.configure(text=str(expenses.get_total_entries(user_id)))
         dashboard_scr.pack(fill="both", expand=True)
 
     def logout():
@@ -171,6 +173,12 @@ def UserLogin():
     #data print
     total_amount = ctk.CTkLabel(total_amount_dashb, text="", font=("Segoe UI", 20, "bold"))
     total_amount.pack(pady=5)
+
+    this_month = ctk.CTkLabel(this_month_dashb, text="", font=("Segoe UI", 20, "bold"))
+    this_month.pack(pady=5)
+
+    total_entries = ctk.CTkLabel(total_entries_dashb, text="", font=("Segoe UI", 20, "bold"))
+    total_entries.pack(pady=5)
 
     if __name__ == "__main__":
 
