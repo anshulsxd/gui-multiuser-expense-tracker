@@ -14,6 +14,7 @@ def create_table():
         CREATE TABLE IF NOT EXISTS expenses (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER NOT NULL,
+            title TEXT NOT NULL,
             amount REAL NOT NULL,
             category TEXT NOT NULL,
             description TEXT,
@@ -79,3 +80,19 @@ def delete_expense(expense_id, user_id):
 
     conn.commit()
     conn.close()
+
+def get_total_exp(user_id):
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT SUM(amount) FROM expenses WHERE user_id = ?""", (user_id,)
+    )
+
+    total = cursor.fetchone()[0]
+    conn.close()
+
+    if total is None:
+        return 0
+
+    return total
