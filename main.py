@@ -2,6 +2,8 @@ import customtkinter as ctk
 import account
 import expenses
 
+DEV_MODE = True
+
 window = ctk.CTk()
 account.create_table()
 expenses.create_table()
@@ -143,8 +145,27 @@ def UserLogin():
     dashboard_title = ctk.CTkLabel(dashboard_scr, text="Stats", font=("Segoe UI", 50, "bold"))
     dashboard_title.pack(pady=35)
 
-    total_amount_dashb = ctk.CTkFrame(dashboard_scr, width=175, corner_radius=15)
-    total_amount_dashb.pack(side="left", padx=50, pady=50)
+    total_amount_dashb = ctk.CTkFrame(dashboard_scr, width=200, height=125, corner_radius=15)
+    total_amount_dashb.place(x=275, y=200)
+    total_amount_dashb.pack_propagate(False)
+
+    this_month_dashb = ctk.CTkFrame(dashboard_scr, width=200, height=125, corner_radius=15)
+    this_month_dashb.place(x=495, y=200)
+    this_month_dashb.pack_propagate(False)
+
+    total_entries_dashb = ctk.CTkFrame(dashboard_scr, width=200, height=125, corner_radius=15)
+    total_entries_dashb.place(x=720, y=200)
+    total_entries_dashb.pack_propagate(False)
+
+    total_amount_title = ctk.CTkLabel(total_amount_dashb, text="Total Amount", font=("Segoe UI", 16, "bold"))
+    total_amount_title.pack()
+
+    if __name__ == "__main__":
+
+        if DEV_MODE:
+            successLogin("test1")
+        else:
+            UserLogin()
 
 UserLogin()
 window.mainloop()
