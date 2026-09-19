@@ -15,6 +15,7 @@ def UserLogin():
     login_scr = ctk.CTkFrame(window)
     createAcc_scr = ctk.CTkFrame(window)
     dashboard_scr = ctk.CTkFrame(window)
+    expenses_scr = ctk.CTkFrame(window)
 
     def switchToSignin():
         login_scr.pack_forget()
@@ -35,6 +36,10 @@ def UserLogin():
     def logout():
         dashboard_scr.pack_forget()
         login_scr.pack(fill="both", expand=True)
+
+    def expensesScrShow():
+        dashboard_scr.pack_forget()
+        expenses_scr.pack(fill="both", expand=True)
 
     # ------- login scr ------:
     title_login = ctk.CTkLabel(login_scr, text="Login", font=("Segoe UI", 50, "bold"))
@@ -134,7 +139,7 @@ def UserLogin():
     dashboard_btn = ctk.CTkButton(sideBar, text="Dashboard", width=170)
     dashboard_btn.pack(pady=(40, 10), padx=15)
 
-    expenses_btn = ctk.CTkButton(sideBar, text="Expenses", width=170)
+    expenses_btn = ctk.CTkButton(sideBar, text="Expenses", width=170, command=expensesScrShow)
     expenses_btn.pack(pady=10, padx=15)
 
     add_expense_btn = ctk.CTkButton(sideBar, text="+ Add Expense", width=170)
@@ -179,6 +184,33 @@ def UserLogin():
 
     total_entries = ctk.CTkLabel(total_entries_dashb, text="", font=("Segoe UI", 20, "bold"))
     total_entries.pack(pady=5)
+
+    # ----------- expenses ------------
+
+    topBarExp = ctk.CTkFrame(expenses_scr, height=40, corner_radius=0)
+    topBarExp.pack(fill="x")
+    
+    userLabelExp = ctk.CTkLabel(topBarExp, text="")
+    userLabelExp.pack(side="right", padx=15)
+    
+    sideBarExp = ctk.CTkFrame(expenses_scr, width=200, corner_radius=15)
+    sideBarExp.pack(side="left", fill="y", padx=12, pady=12)
+    sideBarExp.pack_propagate(False)
+    
+    dashboard_btn = ctk.CTkButton(sideBarExp, text="Dashboard", width=170)
+    dashboard_btn.pack(pady=(40, 10), padx=15)
+    
+    expenses_btn = ctk.CTkButton(sideBarExp, text="Expenses", width=170)
+    expenses_btn.pack(pady=10, padx=15)
+    
+    add_expense_btn = ctk.CTkButton(sideBarExp, text="+ Add Expense", width=170)
+    add_expense_btn.pack(pady=10, padx=15)
+    
+    settings_btn = ctk.CTkButton(sideBarExp, text="Settings", width=170)
+    settings_btn.pack(pady=10, padx=15)
+    
+    logout_btn = ctk.CTkButton(sideBarExp, text="Logout", width=170, fg_color="gray", hover_color="red", command=logout)
+    logout_btn.pack(side="bottom", pady=25, padx=15)
 
     if __name__ == "__main__":
 
