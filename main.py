@@ -2,7 +2,7 @@ import customtkinter as ctk
 import account
 import expenses
 
-DEV_MODE = True
+DEV_MODE = True  # this is for devlopment mode for skip login screen 
 
 window = ctk.CTk()
 account.create_table()
@@ -16,6 +16,8 @@ def UserLogin():
     createAcc_scr = ctk.CTkFrame(window)
     dashboard_scr = ctk.CTkFrame(window)
     expenses_scr = ctk.CTkFrame(window)
+    current_username = None
+    current_user_id = None
 
     def switchToSignin():
         login_scr.pack_forget()
@@ -26,6 +28,9 @@ def UserLogin():
         login_scr.pack(fill="both", expand=True)
 
     def successLogin(username, user_id):
+        nonlocal current_username, current_user_id
+        current_username = username
+        current_user_id = user_id
         login_scr.pack_forget()
         userLabel.configure(text=f"👤 Hi, {username}")
         total_amount.configure(text=f"$ {expenses.get_total_exp(user_id):.2f}")
@@ -35,11 +40,18 @@ def UserLogin():
 
     def logout():
         dashboard_scr.pack_forget()
+        expenses_scr.pack_forget()
         login_scr.pack(fill="both", expand=True)
 
     def expensesScrShow():
         dashboard_scr.pack_forget()
         expenses_scr.pack(fill="both", expand=True)
+        userLabelExp.configure(text=f"👤 Hi, {current_username}")
+
+    def backtologin():
+        expenses_scr.pack_forget()
+        sideBarExp.pack_forget()
+        login_scr.pack(fill="both", expand=True)
 
     # ------- login scr ------:
     title_login = ctk.CTkLabel(login_scr, text="Login", font=("Segoe UI", 50, "bold"))
@@ -197,7 +209,7 @@ def UserLogin():
     sideBarExp.pack(side="left", fill="y", padx=12, pady=12)
     sideBarExp.pack_propagate(False)
     
-    dashboard_btn = ctk.CTkButton(sideBarExp, text="Dashboard", width=170)
+    dashboard_btn = ctk.CTkButton(sideBarExp, text="Dashboard", width=170, command=lambda: (expenses_scr.pack_forget(), dashboard_scr.pack(fill="both", expand=True)))
     dashboard_btn.pack(pady=(40, 10), padx=15)
     
     expenses_btn = ctk.CTkButton(sideBarExp, text="Expenses", width=170)
@@ -211,6 +223,9 @@ def UserLogin():
     
     logout_btn = ctk.CTkButton(sideBarExp, text="Logout", width=170, fg_color="gray", hover_color="red", command=logout)
     logout_btn.pack(side="bottom", pady=25, padx=15)
+
+    expenses_title = ctk.CTkLabel(expenses_scr, text="Expenses", font=("Segoe UI", 50, "bold"))
+    expenses_title.pack(pady=35)
 
     if __name__ == "__main__":
 

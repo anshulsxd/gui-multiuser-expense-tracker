@@ -31,17 +31,18 @@ def create_table():
     conn.close()
 
 
-def add_expense(user_id, amount, category, description):
+def add_expense(user_id, title, amount, category, description):
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
     today = date.today().isoformat()
 
     cursor.execute("""
         INSERT INTO expenses
-        (user_id, amount, category, description, date)
-        VALUES (?, ?, ?, ?, ?)
+        (user_id, title, amount, category, description, date)
+        VALUES (?, ?, ?, ?, ?, ?)
     """, (
         user_id,
+        title,
         amount,
         category,
         description,
