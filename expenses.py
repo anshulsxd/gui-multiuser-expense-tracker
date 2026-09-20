@@ -53,16 +53,16 @@ def add_expense(user_id, title, amount, category, description):
     conn.close()
 
 
-def get_expenses(user_id):
+def get_expenses(user_id, date_value):
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
 
     cursor.execute("""
-        SELECT id, amount, category, description, date
+        SELECT id, title, amount, category, description, date
         FROM expenses
-        WHERE user_id = ?
+        WHERE user_id = ? AND date = ?
         ORDER BY id DESC
-    """, (user_id,))
+    """, (user_id, date_value,))
 
     expenses = cursor.fetchall()
 

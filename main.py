@@ -1,6 +1,7 @@
 import customtkinter as ctk
 import account
 import expenses
+from datetime import date
 
 DEV_MODE = True  # this is for devlopment mode for skip login screen 
 
@@ -47,6 +48,28 @@ def UserLogin():
         dashboard_scr.pack_forget()
         expenses_scr.pack(fill="both", expand=True)
         userLabelExp.configure(text=f"👤 Hi, {current_username}")
+        fetch_expenses()
+
+    def fetch_expenses():
+        date_value = searchBar.get().strip()
+        if not date_value:
+            date_value = date.today().isoformat()
+            searchBar.delete(0, "end")
+            searchBar.insert(0, date_value)
+
+        for widget in expense_results.winfo_children():
+            widget.destroy()
+
+        records = expenses.get_expenses(current_user_id, date_value)
+        if not records:
+            ctk.CTkLabel(expense_results, text="No expenses found for this date.").pack(pady=12)
+            return
+
+        for expense_id, title, amount, category, description, expense_date in records:
+            text = f"{expense_date}  |  {title}  |  ${amount:.2f}  |  {category}"
+            if description:
+                text += f"  |  {description}"
+            ctk.CTkLabel(expense_results, text=text, anchor="w").pack(fill="x", padx=12, pady=4)
 
     def backtologin():
         expenses_scr.pack_forget()
@@ -226,6 +249,16 @@ def UserLogin():
 
     expenses_title = ctk.CTkLabel(expenses_scr, text="Expenses", font=("Segoe UI", 50, "bold"))
     expenses_title.pack(pady=35)
+
+    searchBar = ctk.CTkEntry(expenses_scr, placeholder_text="Date (YYYY-MM-DD)", height=50, width=500)
+    searchBar.place(x=245, y=185)
+    searchBar.insert(0, date.today().isoformat())
+
+    searchButton = ctk.CTkButton(expenses_scr, text="GO", height=49, width=200, command=fetch_expenses)
+    searchButton.place(x=760, y=185)
+
+    expense_results = ctk.CTkScrollableFrame(expenses_scr, width=715, height=275)
+    expense_results.place(x=245, y=255)
 
     if __name__ == "__main__":
 
