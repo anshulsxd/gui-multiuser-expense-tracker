@@ -66,10 +66,27 @@ def UserLogin():
             return
 
         for expense_id, title, amount, category, description, expense_date in records:
-            text = f"{expense_date}  |  {title}  |  ${amount:.2f}  |  {category}"
+            expense_box = ctk.CTkFrame(expense_results, corner_radius=10, border_width=1)
+            expense_box.pack(fill="x", padx=8, pady=6)
+
+            ctk.CTkLabel(
+                expense_box,
+                text=f"{title}  |  ${amount:.2f}",
+                anchor="w",
+                font=("Segoe UI", 16, "bold")
+            ).pack(fill="x", padx=12, pady=(10, 2))
+
+            details = f"{expense_date}  |  {category}"
             if description:
-                text += f"  |  {description}"
-            ctk.CTkLabel(expense_results, text=text, anchor="w").pack(fill="x", padx=12, pady=4)
+                details += f"  |  {description}"
+
+            ctk.CTkLabel(
+                expense_box,
+                text=details,
+                anchor="w",
+                justify="left",
+                wraplength=650
+            ).pack(fill="x", padx=12, pady=(0, 10))
 
     def backtologin():
         expenses_scr.pack_forget()
