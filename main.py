@@ -19,6 +19,7 @@ def UserLogin():
     expenses_scr = ctk.CTkFrame(window)
     current_username = None
     current_user_id = None
+    addExp_scr = ctk.CTkFrame(window)
 
     def switchToSignin():
         login_scr.pack_forget()
@@ -42,10 +43,17 @@ def UserLogin():
     def logout():
         dashboard_scr.pack_forget()
         expenses_scr.pack_forget()
+        addExp_scr.pack_forget()
         login_scr.pack(fill="both", expand=True)
+
+    def showDashboard():
+        expenses_scr.pack_forget()
+        addExp_scr.pack_forget()
+        dashboard_scr.pack(fill="both", expand=True)
 
     def expensesScrShow():
         dashboard_scr.pack_forget()
+        addExp_scr.pack_forget()
         expenses_scr.pack(fill="both", expand=True)
         userLabelExp.configure(text=f"👤 Hi, {current_username}")
         fetch_expenses()
@@ -88,10 +96,11 @@ def UserLogin():
                 wraplength=650
             ).pack(fill="x", padx=12, pady=(0, 10))
 
-    def backtologin():
+    def switchToAddExp():
+        dashboard_scr.pack_forget()
         expenses_scr.pack_forget()
-        sideBarExp.pack_forget()
-        login_scr.pack(fill="both", expand=True)
+        addExp_scr.pack(fill="both", expand=True)
+        userLabelAddExp.configure(text=f"👤 Hi, {current_username}")
 
     # ------- login scr ------:
     title_login = ctk.CTkLabel(login_scr, text="Login", font=("Segoe UI", 50, "bold"))
@@ -194,7 +203,7 @@ def UserLogin():
     expenses_btn = ctk.CTkButton(sideBar, text="Expenses", width=170, command=expensesScrShow)
     expenses_btn.pack(pady=10, padx=15)
 
-    add_expense_btn = ctk.CTkButton(sideBar, text="+ Add Expense", width=170)
+    add_expense_btn = ctk.CTkButton(sideBar, text="+ Add Expense", width=170, command=switchToAddExp)
     add_expense_btn.pack(pady=10, padx=15)
 
     settings_btn = ctk.CTkButton(sideBar, text="Settings", width=170)
@@ -249,13 +258,13 @@ def UserLogin():
     sideBarExp.pack(side="left", fill="y", padx=12, pady=12)
     sideBarExp.pack_propagate(False)
     
-    dashboard_btn = ctk.CTkButton(sideBarExp, text="Dashboard", width=170, command=lambda: (expenses_scr.pack_forget(), dashboard_scr.pack(fill="both", expand=True)))
+    dashboard_btn = ctk.CTkButton(sideBarExp, text="Dashboard", width=170, command=showDashboard)
     dashboard_btn.pack(pady=(40, 10), padx=15)
     
     expenses_btn = ctk.CTkButton(sideBarExp, text="Expenses", width=170)
     expenses_btn.pack(pady=10, padx=15)
     
-    add_expense_btn = ctk.CTkButton(sideBarExp, text="+ Add Expense", width=170)
+    add_expense_btn = ctk.CTkButton(sideBarExp, text="+ Add Expense", width=170, command=switchToAddExp)
     add_expense_btn.pack(pady=10, padx=15)
     
     settings_btn = ctk.CTkButton(sideBarExp, text="Settings", width=170)
@@ -271,11 +280,58 @@ def UserLogin():
     searchBar.place(x=245, y=185)
     searchBar.insert(0, date.today().isoformat())
 
-    searchButton = ctk.CTkButton(expenses_scr, text="GO", height=49, width=200, command=fetch_expenses)
+    searchButton = ctk.CTkButton(expenses_scr, text="GO   ---->", height=49, width=200, command=fetch_expenses)
     searchButton.place(x=760, y=185)
 
     expense_results = ctk.CTkScrollableFrame(expenses_scr, width=715, height=275)
     expense_results.place(x=245, y=255)
+
+    # --------- add expenses ----------
+
+    topBarAddExp = ctk.CTkFrame(addExp_scr, height=28, corner_radius=0)
+    topBarAddExp.pack(fill="x")
+
+    userLabelAddExp = ctk.CTkLabel(topBarAddExp, text="")
+    userLabelAddExp.pack(side="right", padx=15)
+
+    sideBarAddExp = ctk.CTkFrame(addExp_scr, width=200, corner_radius=15)
+    sideBarAddExp.pack(side="left", fill="y", padx=12, pady=12)
+    sideBarAddExp.pack_propagate(False)
+
+    dashboard_btn = ctk.CTkButton(sideBarAddExp, text="Dashboard", width=170, command=showDashboard)
+    dashboard_btn.pack(pady=(40, 10), padx=15)
+    
+    expenses_btn = ctk.CTkButton(sideBarAddExp, text="Expenses", width=170, command=expensesScrShow)
+    expenses_btn.pack(pady=10, padx=15)
+    
+    add_expense_btn = ctk.CTkButton(sideBarAddExp, text="+ Add Expense", width=170)
+    add_expense_btn.pack(pady=10, padx=15)
+    
+    settings_btn = ctk.CTkButton(sideBarAddExp, text="Settings", width=170)
+    settings_btn.pack(pady=10, padx=15)
+    
+    logout_btn = ctk.CTkButton(sideBarAddExp, text="Logout", width=170, fg_color="gray", hover_color="red", command=logout)
+    logout_btn.pack(side="bottom", pady=25, padx=15)
+
+    addExpenses_title = ctk.CTkLabel(addExp_scr, text="Add Expenses", font=("Segoe UI", 50, "bold"))
+    addExpenses_title.pack(pady=35)
+
+    addTitle = ctk.CTkEntry(addExp_scr, placeholder_text="Expense title", height=50, width=700)
+    addTitle.place(x=245, y=185)
+
+    addPrice = ctk.CTkEntry(addExp_scr, placeholder_text="Amount ($)", height=50, width=350)
+    addPrice.place(x=245, y=280)
+
+    expCategory = ctk.CTkOptionMenu(addExp_scr, values=[
+        "Food",
+        "Beverage",
+        "Transport",
+        "Shopping",
+        "Bills",
+        "Entertainment",
+        "Other"
+    ], height=50, width=325, fg_color="gray25", button_color="gray25", button_hover_color="gray35")
+    expCategory.place(x=620, y=280)
 
     if __name__ == "__main__":
 
