@@ -1,7 +1,7 @@
-import customtkinter as ctk
-import account
-import expenses
-from datetime import date
+import customtkinter as ctk # external lib
+import account # file import
+import expenses # file import
+from datetime import date # inbuilt lib
 
 DEV_MODE = True  # this is for devlopment mode for skip login screen 
 
@@ -322,7 +322,7 @@ def UserLogin():
     addPrice = ctk.CTkEntry(addExp_scr, placeholder_text="Amount ($)", height=50, width=350)
     addPrice.place(x=245, y=280)
 
-    expCategory = ctk.CTkOptionMenu(addExp_scr, values=[
+    addCategory = ctk.CTkOptionMenu(addExp_scr, values=[
         "Food",
         "Beverage",
         "Transport",
@@ -331,7 +331,10 @@ def UserLogin():
         "Entertainment",
         "Other"
     ], height=50, width=325, fg_color="gray25", button_color="gray25", button_hover_color="gray35")
-    expCategory.place(x=620, y=280)
+    addCategory.place(x=620, y=280)
+
+    addDescription = ctk.CTkEntry(addExp_scr, placeholder_text="Description", height=75, width=700)
+    addDescription.place(x=245, y=375)
 
     if __name__ == "__main__":
 
