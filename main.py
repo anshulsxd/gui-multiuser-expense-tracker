@@ -3,7 +3,7 @@ import account # file import
 import expenses # file import
 from datetime import date # inbuilt lib
 
-DEV_MODE = True  # this is for devlopment mode for skip login screen 
+DEV_MODE = True  # this is for devlopment mode for skip login screen, disabled (False) by default
 
 window = ctk.CTk()
 account.create_table()
@@ -96,6 +96,25 @@ def UserLogin():
                 wraplength=650
             ).pack(fill="x", padx=12, pady=(0, 10))
 
+    def addExpense():
+        UserID = current_user_id
+        ExpTitle = addTitle.get()
+        ExpPrice = addPrice.get()
+        ExpCategory = addCategory.get()
+        ExpDescription = addDescription.get()
+
+        if not ExpTitle or not ExpPrice or not ExpCategory:
+            errorText.configure(text="Please fill required fields!")
+            window.after(5000, lambda: errorText.configure(text=""))
+            return
+
+        else:
+            expenses.add_expense(UserID, ExpTitle, ExpPrice, ExpCategory, ExpDescription)
+            addTitle.delete(0, "end")
+            addPrice.delete(0, "end")
+            addCategory.set("Food")
+            addDescription.delete(0, "end")
+
     def switchToAddExp():
         dashboard_scr.pack_forget()
         expenses_scr.pack_forget()
@@ -170,7 +189,11 @@ def UserLogin():
     
         if success:
             switchToLogin()
+
         else:
+            createUsrnme.delete(0, "end")
+            createPass.delete(0, "end")
+
             signup_label.configure(text="Username already exist!")
 
             window.after(5000, lambda:signup_label.configure(text=""))
@@ -206,8 +229,8 @@ def UserLogin():
     add_expense_btn = ctk.CTkButton(sideBar, text="+ Add Expense", width=170, command=switchToAddExp)
     add_expense_btn.pack(pady=10, padx=15)
 
-    settings_btn = ctk.CTkButton(sideBar, text="Settings", width=170)
-    settings_btn.pack(pady=10, padx=15)
+    delExp_btn = ctk.CTkButton(sideBar, text="- Delete expense", width=170)
+    delExp_btn.pack(pady=10, padx=15)
 
     logout_btn = ctk.CTkButton(sideBar, text="Logout", width=170, fg_color="gray", hover_color="red", command=logout)
     logout_btn.pack(side="bottom", pady=25, padx=15)
@@ -267,8 +290,8 @@ def UserLogin():
     add_expense_btn = ctk.CTkButton(sideBarExp, text="+ Add Expense", width=170, command=switchToAddExp)
     add_expense_btn.pack(pady=10, padx=15)
     
-    settings_btn = ctk.CTkButton(sideBarExp, text="Settings", width=170)
-    settings_btn.pack(pady=10, padx=15)
+    delExp_btn = ctk.CTkButton(sideBarExp, text="- Delete expense", width=170)
+    delExp_btn.pack(pady=10, padx=15)
     
     logout_btn = ctk.CTkButton(sideBarExp, text="Logout", width=170, fg_color="gray", hover_color="red", command=logout)
     logout_btn.pack(side="bottom", pady=25, padx=15)
@@ -307,8 +330,8 @@ def UserLogin():
     add_expense_btn = ctk.CTkButton(sideBarAddExp, text="+ Add Expense", width=170)
     add_expense_btn.pack(pady=10, padx=15)
     
-    settings_btn = ctk.CTkButton(sideBarAddExp, text="Settings", width=170)
-    settings_btn.pack(pady=10, padx=15)
+    delExp_btn = ctk.CTkButton(sideBarAddExp, text="- Delete expense", width=170)
+    delExp_btn.pack(pady=10, padx=15)
     
     logout_btn = ctk.CTkButton(sideBarAddExp, text="Logout", width=170, fg_color="gray", hover_color="red", command=logout)
     logout_btn.pack(side="bottom", pady=25, padx=15)
@@ -316,10 +339,10 @@ def UserLogin():
     addExpenses_title = ctk.CTkLabel(addExp_scr, text="Add Expenses", font=("Segoe UI", 50, "bold"))
     addExpenses_title.pack(pady=35)
 
-    addTitle = ctk.CTkEntry(addExp_scr, placeholder_text="Expense title", height=50, width=700)
+    addTitle = ctk.CTkEntry(addExp_scr, placeholder_text="Expense title *", height=50, width=700)
     addTitle.place(x=245, y=185)
 
-    addPrice = ctk.CTkEntry(addExp_scr, placeholder_text="Amount ($)", height=50, width=350)
+    addPrice = ctk.CTkEntry(addExp_scr, placeholder_text="Amount ($) *", height=50, width=350)
     addPrice.place(x=245, y=280)
 
     addCategory = ctk.CTkOptionMenu(addExp_scr, values=[
@@ -335,6 +358,12 @@ def UserLogin():
 
     addDescription = ctk.CTkEntry(addExp_scr, placeholder_text="Description", height=75, width=700)
     addDescription.place(x=245, y=375)
+
+    errorText = ctk.CTkLabel(addExp_scr, text="")
+    errorText.place(x=530, y=465)
+
+    addExpButton = ctk.CTkButton(addExp_scr, text="Add", height=50, width=150, command=addExpense)
+    addExpButton.place(x=525, y=500)
 
     if __name__ == "__main__":
 
