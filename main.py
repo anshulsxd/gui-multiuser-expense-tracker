@@ -3,7 +3,7 @@ import account # file import
 import expenses # file import
 from datetime import date # inbuilt lib
 
-DEV_MODE = True  # this is for devlopment mode for skip login screen, disabled (False) by default
+DEV_MODE = False  # this is for devlopment mode for skip login screen, disabled (False) by default
 
 window = ctk.CTk()
 account.create_table()
@@ -38,6 +38,7 @@ def UserLogin():
         total_amount.configure(text=f"$ {expenses.get_total_exp(user_id):.2f}")
         this_month.configure(text=f"$ {expenses.get_this_month(user_id):.2f}")
         total_entries.configure(text=str(expenses.get_total_entries(user_id)))
+        today_spend.configure(text=f"$ {expenses.get_today_expense(user_id):.2f}")
         dashboard_scr.pack(fill="both", expand=True)
 
     def logout():
@@ -144,6 +145,8 @@ def UserLogin():
         check = account.login(username, password)
 
         if check:
+            usrnmeEntery.delete(0, "end")
+            passEntery.delete(0, "end")
             successLogin(username, check)
 
         else:
@@ -250,6 +253,10 @@ def UserLogin():
     total_entries_dashb.place(x=720, y=200)
     total_entries_dashb.pack_propagate(False)
 
+    today_expense_dashb = ctk.CTkFrame(dashboard_scr, width=225, height=125, corner_radius=15)
+    today_expense_dashb.place(x=483, y=350)
+    today_expense_dashb.pack_propagate(False)
+
     total_amount_title = ctk.CTkLabel(total_amount_dashb, text="Total Amount", font=("Segoe UI", 20, "bold"))
     total_amount_title.pack(pady=10)
 
@@ -258,6 +265,9 @@ def UserLogin():
 
     total_entries_title = ctk.CTkLabel(total_entries_dashb, text="Total Entries", font=("Segoe UI", 20, "bold"))
     total_entries_title.pack(pady=10)
+
+    today_expense_title = ctk.CTkLabel(today_expense_dashb, text="Money spend today", font=("Segoe UI", 20, "bold"))
+    today_expense_title.pack(pady=10)
 
     #data print
     total_amount = ctk.CTkLabel(total_amount_dashb, text="", font=("Segoe UI", 20, "bold"))
@@ -268,6 +278,9 @@ def UserLogin():
 
     total_entries = ctk.CTkLabel(total_entries_dashb, text="", font=("Segoe UI", 20, "bold"))
     total_entries.pack(pady=5)
+
+    today_spend = ctk.CTkLabel(today_expense_dashb, text="", font=("Segoe UI", 20, "bold"))
+    today_spend.pack(pady=5)
 
     # ----------- expenses ------------
 

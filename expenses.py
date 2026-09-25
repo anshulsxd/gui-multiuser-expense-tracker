@@ -128,3 +128,18 @@ def get_total_entries(user_id):
 
     conn.close()
     return total_entries
+
+def get_today_expense(user_id):
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+
+    # today = date.today().isoformat()
+
+    cursor.execute("""
+        SELECT SUM(amount) FROM expenses WHERE user_id = ? AND date = DATE('now')""", (user_id,)
+    )
+
+    total_todaySpend = cursor.fetchone()[0] or 0
+
+    conn.close()
+    return total_todaySpend
