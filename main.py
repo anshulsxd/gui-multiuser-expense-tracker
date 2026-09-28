@@ -3,7 +3,7 @@ import account # file import
 import expenses # file import
 from datetime import date # inbuilt lib
 
-DEV_MODE = False  # this is for devlopment mode for skip login screen, disabled (False) by default
+DEV_MODE = True  # this is for devlopment mode for skip login screen, disabled (False) by default
 
 window = ctk.CTk()
 account.create_table()
@@ -20,6 +20,7 @@ def UserLogin():
     current_username = None
     current_user_id = None
     addExp_scr = ctk.CTkFrame(window)
+    delExp_scr = ctk.CTkFrame(window)
 
     def switchToSignin():
         login_scr.pack_forget()
@@ -45,16 +46,19 @@ def UserLogin():
         dashboard_scr.pack_forget()
         expenses_scr.pack_forget()
         addExp_scr.pack_forget()
+        delExp_scr.pack_forget()
         login_scr.pack(fill="both", expand=True)
 
     def showDashboard():
         expenses_scr.pack_forget()
         addExp_scr.pack_forget()
+        delExp_scr.pack_forget()
         dashboard_scr.pack(fill="both", expand=True)
 
     def expensesScrShow():
         dashboard_scr.pack_forget()
         addExp_scr.pack_forget()
+        delExp_scr.pack_forget()
         expenses_scr.pack(fill="both", expand=True)
         userLabelExp.configure(text=f"👤 Hi, {current_username}")
         fetch_expenses()
@@ -80,7 +84,7 @@ def UserLogin():
 
             ctk.CTkLabel(
                 expense_box,
-                text=f"{title}  |  ${amount:.2f}",
+                text=f"ID: {expense_id}  |  {title}  |  ${amount:.2f}",
                 anchor="w",
                 font=("Segoe UI", 16, "bold")
             ).pack(fill="x", padx=12, pady=(10, 2))
@@ -119,8 +123,31 @@ def UserLogin():
     def switchToAddExp():
         dashboard_scr.pack_forget()
         expenses_scr.pack_forget()
+        delExp_scr.pack_forget()
         addExp_scr.pack(fill="both", expand=True)
         userLabelAddExp.configure(text=f"👤 Hi, {current_username}")
+
+    def showDelExp_scr():
+        dashboard_scr.pack_forget()
+        expenses_scr.pack_forget()
+        addExp_scr.pack_forget()
+        delExp_scr.pack(fill="both", expand=True)
+        userLabelDelExp.configure(text=f"👤 Hi, {current_username}")
+
+    def deleteExpense():
+        expense_id = delExpIDEntry.get().strip()
+
+        try:
+            expense_id = int(expense_id)
+        except ValueError:
+            deleteStatus.configure(text="Enter a valid expense ID.")
+            return
+
+        if expenses.delete_expense(expense_id, current_user_id):
+            deleteStatus.configure(text="Expense deleted.")
+            delExpIDEntry.delete(0, "end")
+        else:
+            deleteStatus.configure(text="Expense not found.")
 
     # ------- login scr ------:
     title_login = ctk.CTkLabel(login_scr, text="Login", font=("Segoe UI", 50, "bold"))
@@ -232,7 +259,7 @@ def UserLogin():
     add_expense_btn = ctk.CTkButton(sideBar, text="+ Add Expense", width=170, command=switchToAddExp)
     add_expense_btn.pack(pady=10, padx=15)
 
-    delExp_btn = ctk.CTkButton(sideBar, text="- Delete expense", width=170)
+    delExp_btn = ctk.CTkButton(sideBar, text="- Delete expense", width=170, command=showDelExp_scr)
     delExp_btn.pack(pady=10, padx=15)
 
     logout_btn = ctk.CTkButton(sideBar, text="Logout", width=170, fg_color="gray", hover_color="red", command=logout)
@@ -303,7 +330,7 @@ def UserLogin():
     add_expense_btn = ctk.CTkButton(sideBarExp, text="+ Add Expense", width=170, command=switchToAddExp)
     add_expense_btn.pack(pady=10, padx=15)
     
-    delExp_btn = ctk.CTkButton(sideBarExp, text="- Delete expense", width=170)
+    delExp_btn = ctk.CTkButton(sideBarExp, text="- Delete expense", width=170, command=showDelExp_scr)
     delExp_btn.pack(pady=10, padx=15)
     
     logout_btn = ctk.CTkButton(sideBarExp, text="Logout", width=170, fg_color="gray", hover_color="red", command=logout)
@@ -343,7 +370,7 @@ def UserLogin():
     add_expense_btn = ctk.CTkButton(sideBarAddExp, text="+ Add Expense", width=170)
     add_expense_btn.pack(pady=10, padx=15)
     
-    delExp_btn = ctk.CTkButton(sideBarAddExp, text="- Delete expense", width=170)
+    delExp_btn = ctk.CTkButton(sideBarAddExp, text="- Delete expense", width=170, command=showDelExp_scr)
     delExp_btn.pack(pady=10, padx=15)
     
     logout_btn = ctk.CTkButton(sideBarAddExp, text="Logout", width=170, fg_color="gray", hover_color="red", command=logout)
@@ -377,6 +404,45 @@ def UserLogin():
 
     addExpButton = ctk.CTkButton(addExp_scr, text="Add", height=50, width=150, command=addExpense)
     addExpButton.place(x=525, y=500)
+
+    # --------- del expense ------------
+
+    topBarDelExp = ctk.CTkFrame(delExp_scr, height=28, corner_radius=0)
+    topBarDelExp.pack(fill="x")
+
+    userLabelDelExp = ctk.CTkLabel(topBarDelExp, text="")
+    userLabelDelExp.pack(side="right", padx=15)
+
+    sideBarAddExp = ctk.CTkFrame(delExp_scr, width=200, corner_radius=15)
+    sideBarAddExp.pack(side="left", fill="y", padx=12, pady=12)
+    sideBarAddExp.pack_propagate(False)
+
+    dashboard_btn = ctk.CTkButton(sideBarAddExp, text="Dashboard", width=170, command=showDashboard)
+    dashboard_btn.pack(pady=(40, 10), padx=15)
+    
+    expenses_btn = ctk.CTkButton(sideBarAddExp, text="Expenses", width=170, command=expensesScrShow)
+    expenses_btn.pack(pady=10, padx=15)
+    
+    add_expense_btn = ctk.CTkButton(sideBarAddExp, text="+ Add Expense", width=170, command=switchToAddExp)
+    add_expense_btn.pack(pady=10, padx=15)
+    
+    delExp_btn = ctk.CTkButton(sideBarAddExp, text="- Delete expense", width=170)
+    delExp_btn.pack(pady=10, padx=15)
+
+    logout_btn = ctk.CTkButton(sideBarAddExp, text="Logout", width=170, fg_color="gray", hover_color="red", command=logout)
+    logout_btn.pack(side="bottom", pady=25, padx=15)
+
+    delExpenses_title = ctk.CTkLabel(delExp_scr, text="Delete Expenses", font=("Segoe UI", 50, "bold"))
+    delExpenses_title.pack(pady=35)
+
+    delExpIDEntry = ctk.CTkEntry(delExp_scr, placeholder_text="Enter expense ID to delete", height=50, width=700)
+    delExpIDEntry.place(x=245, y=185)
+
+    delExpButton = ctk.CTkButton(delExp_scr, text="DELETE", width=170, height=50, command=deleteExpense)
+    delExpButton.place(x=500, y=300)
+
+    deleteStatus = ctk.CTkLabel(delExp_scr, text="")
+    deleteStatus.place(x=500, y=365)
 
     if __name__ == "__main__":
 

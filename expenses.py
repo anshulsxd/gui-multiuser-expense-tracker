@@ -80,8 +80,10 @@ def delete_expense(expense_id, user_id):
         WHERE id = ? AND user_id = ?
     """, (expense_id, user_id))
 
+    deleted = cursor.rowcount > 0
     conn.commit()
     conn.close()
+    return deleted
 
 def get_total_exp(user_id):
     conn = sqlite3.connect(DB_NAME)
