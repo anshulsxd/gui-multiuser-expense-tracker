@@ -4,6 +4,7 @@ import expenses # file import
 from datetime import date # inbuilt lib
 
 window = ctk.CTk()
+window.iconbitmap("assets/appicon.ico")
 account.create_table()
 expenses.create_table()
 window.title("Expense Tracker")
