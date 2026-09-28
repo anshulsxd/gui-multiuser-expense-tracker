@@ -2,9 +2,20 @@ import customtkinter as ctk # external lib
 import account # file import
 import expenses # file import
 from datetime import date # inbuilt lib
+import os
+import sys
+
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except AttributeError:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 window = ctk.CTk()
-window.iconbitmap("assets/appicon.ico")
+
+window.iconbitmap(resource_path("assets/appicon.ico"))
 account.create_table()
 expenses.create_table()
 window.title("Expense Tracker")
