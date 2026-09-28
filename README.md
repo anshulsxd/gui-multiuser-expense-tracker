@@ -31,7 +31,7 @@ Each user has their own account and expenses are associated with their user ID, 
 
 Passwords are not stored as plain text. They are stored in hashed form in the database.
 
-## Installation
+## How to Run Programm
 
 ### Requirements
 
@@ -42,3 +42,23 @@ Install the required external package:
 
 ```bash
 pip install -r requirements.txt
+```
+
+### Run
+
+Make sure Python 3.x is installed on your computer with required packages.
+
+Clone this repository:
+
+```bash
+git clone https://github.com/anshulsxd/gui-multiuser-expense-tracker.git
+```
+
+Run the application:
+```bash
+py main.py
+```
+or 
+```bash
+python main.py
+```
