@@ -3,8 +3,6 @@ import account # file import
 import expenses # file import
 from datetime import date # inbuilt lib
 
-DEV_MODE = True  # this is for devlopment mode for skip login screen, disabled (False) by default
-
 window = ctk.CTk()
 account.create_table()
 expenses.create_table()
@@ -443,11 +441,6 @@ def UserLogin():
 
     deleteStatus = ctk.CTkLabel(delExp_scr, text="")
     deleteStatus.place(x=500, y=365)
-
-    if __name__ == "__main__":
-
-        if DEV_MODE:
-            successLogin("devID", account.login("devID", "devID"))
 
 UserLogin()
 window.mainloop()
